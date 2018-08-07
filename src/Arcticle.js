@@ -1,41 +1,35 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CommentList from 'CommentList';
 
 export default class Article extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    };
-  }
-  getComments() {
-    const { article } = this.props;
-    if (!article.comments) return null;
-    return <CommentList comments={article.comments} />;
-  }
+  static propTypes = {
+    article: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      text: PropTypes.string,
+      title: PropTypes.string.isRequired,
+    }),
+    isOpen: PropTypes.bool.isRequired,
+    toggleOpen: PropTypes.func,
+  };
   getBody() {
-    if (!this.state.isOpen) {
+    const { article, isOpen } = this.props;
+    if (!isOpen) {
       return null;
     }
-    const { article } = this.props;
     return (
       <div>
         <p>{article.text}</p>
-        {this.getComments()}
+        <CommentList comments={article.comments} />
       </div>
     );
   }
-  toggleOpen = () => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-  };
   render() {
-    const { article } = this.props;
+    const { article, toggleOpen } = this.props;
     return (
       <div>
         <h3>{article.title}</h3>
-        <button onClick={this.toggleOpen}>button</button>
+        <button onClick={toggleOpen}>button</button>
         {this.getBody()}
       </div>
     );
