@@ -8,8 +8,8 @@ function ArticleList(props) {
     <li key={article.id}>
       <Article
         article={article}
-        isOpen={article.id === props.openArticleId}
-        toggleOpen={props.toggleOpen(article.id)}
+        isOpen={article.id === props.openItemId}
+        toggleOpen={props.toggleOpenItem(article.id)}
       />
     </li>
   ));
@@ -18,8 +18,8 @@ function ArticleList(props) {
 
 ArticleList.propTypes = {
   articles: PropTypes.array,
-  openArticleId: PropTypes.string,
-  toggleOpen: PropTypes.func.isRequired,
+  openItemId: PropTypes.string,
+  toggleOpenItem: PropTypes.func.isRequired,
 };
 
 export default accordionDecorator(ArticleList);
