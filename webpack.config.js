@@ -1,9 +1,9 @@
 // https://github.com/diegohaz/arc/wiki/Webpack
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const devServer = require('@webpack-blocks/dev-server2')
-const splitVendor = require('webpack-blocks-split-vendor')
-const happypack = require('webpack-blocks-happypack')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const devServer = require('@webpack-blocks/dev-server2');
+const splitVendor = require('webpack-blocks-split-vendor');
+const happypack = require('webpack-blocks-happypack');
 
 const {
   addPlugins, createConfig, entryPoint, env, setOutput,
@@ -21,9 +21,13 @@ const babel = () => () => ({
   module: {
     rules: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader' },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+      },
     ],
   },
-})
+});
 
 const assets = () => () => ({
   module: {
@@ -86,6 +90,17 @@ const config = createConfig([
       new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
     ]),
   ]),
-])
+]);
 
-module.exports = config
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        loaders: [ 'style-loader', 'css-loader' ]
+      },
+    ],
+  },
+};
+
+module.exports = config;

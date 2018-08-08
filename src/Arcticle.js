@@ -12,6 +12,9 @@ export default class Article extends Component {
     isOpen: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func,
   };
+  componentWillUpdate(){
+    console.log('update');
+  }
   getBody() {
     const { article, isOpen } = this.props;
     if (!isOpen) {
