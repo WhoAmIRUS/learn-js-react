@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Comment from 'Comment';
+import CommentAdder from 'CommentAdder';
 
 function CommentList({ comments }) {
   if (!comments.length) return null;
@@ -9,7 +10,12 @@ function CommentList({ comments }) {
       <Comment comment={comment} />
     </li>
   ));
-  return <ul>{commentList}</ul>;
+  return (
+    <div>
+      <ul>{commentList}</ul>
+      <CommentAdder />
+    </div>
+  );
 }
 
 CommentList.defaultProps = {
