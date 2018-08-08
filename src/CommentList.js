@@ -4,12 +4,14 @@ import Comment from 'Comment';
 import CommentAdder from 'CommentAdder';
 
 function CommentList({ comments }) {
-  if (!comments.length) return null;
-  const commentList = comments.map(comment => (
-    <li key={comment.id}>
-      <Comment comment={comment} />
-    </li>
-  ));
+  let commentList = null;
+  if (comments.length) {
+    commentList = comments.map(comment => (
+      <li key={comment.id}>
+        <Comment comment={comment} />
+      </li>
+    ));
+  }
   return (
     <div>
       <ul>{commentList}</ul>

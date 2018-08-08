@@ -19,28 +19,19 @@ export default class CommentAdder extends Component {
       text: '',
     };
   }
+  isError = (type, minLength, maxLength) => {
+    const inputLength = this.state[type].length;
+    console.log(type, inputLength);
+    return inputLength < minLength || inputLength > maxLength;
+  };
   addComment = () => {
     const { userName, text } = this.state;
     console.log(userName, text);
     this.setState(this.getInitialState());
   };
-  changeInput = (name, minLength, maxLength) => ev => {
-    const inputLength = ev.target.value.length;
-    if (inputLength < minLength || inputLength > maxLength) {
-      this.setState({
-        error: {
-          [name]: true,
-        },
-      });
-    } else {
-      this.setState({
-        error: {
-          [name]: false,
-        },
-      });
-    }
+  changeInput = type => ev => {
     this.setState({
-      [name]: ev.target.value,
+      [type]: ev.target.value,
     });
   };
   render() {
@@ -50,16 +41,16 @@ export default class CommentAdder extends Component {
           Name:
           <Input
             value={this.state.userName}
-            onChange={this.changeInput('userName', 5, 15)}
-            isError={this.state.error ? this.state.error.userName : null}
+            onChange={this.changeInput('userName')}
+            isError={this.isError('userName', 5, 15)}
           />
         </label>
         <label htmlFor="text">
           Text:
           <Input
             value={this.state.text}
-            onChange={this.changeInput('text', 20, 50)}
-            isError={this.state.error ? this.state.error.text : null}
+            onChange={this.changeInput('text')}
+            isError={this.isError('text', 20, 50)}
           />
         </label>
         <button onClick={this.addComment}>Add comment</button>
