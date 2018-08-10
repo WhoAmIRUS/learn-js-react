@@ -1,0 +1,3 @@
+export const DELETE_ARTICLE = 'DELETE_ARTICLE';
+
+export const CHANGE_DATA_RANGE = 'CHANGE_DATA_RANGE';

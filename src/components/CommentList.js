@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Comment from 'Comment';
-import CommentAdder from 'CommentAdder';
+import Comment from './Comment';
+import CommentAdder from './CommentAdder';
 
 function CommentList({ comments }) {
   let commentList = null;
