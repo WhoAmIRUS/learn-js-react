@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Article from './Arcticle';
 import accordionDecorator from '../decorators/Accordion';
+import { filtredArticlesSelector } from '../selectors';
 
 function ArticleList(props) {
   const articleList = props.articles.map(article => (
@@ -23,13 +24,8 @@ ArticleList.propTypes = {
   toggleOpenItem: PropTypes.func.isRequired,
 };
 
-export default connect(({ articles, filters }) => {
-  const { dateRange: { from, to } } = filters;
-  const filtredArticles = articles.filter((article) => {
-    const published = Date.parse(article.date);
-    return !from || !to || (published > from && published < to);
-  });
+export default connect((state) => {
   return {
-    articles: filtredArticles,
+    articles: filtredArticlesSelector(state),
   };
 })(accordionDecorator(ArticleList));

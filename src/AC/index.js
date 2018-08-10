@@ -1,4 +1,10 @@
-import { DELETE_ARTICLE, CHANGE_DATA_RANGE } from '../constants';
+import {DELETE_ARTICLE, CHANGE_DATA_RANGE, INCREMENT } from '../constants';
+
+export function increment() {
+  return {
+    type: INCREMENT,
+  };
+}
 
 export function deleteArticle(id) {
   return {
