@@ -8,6 +8,7 @@ class Counter extends Component {
   };
   render() {
     const { count } = this.props;
+    console.log('update counter');
     return (
       <div>
         {count}

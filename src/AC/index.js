@@ -1,4 +1,4 @@
-import {DELETE_ARTICLE, CHANGE_DATA_RANGE, INCREMENT } from '../constants';
+import {DELETE_ARTICLE, CHANGE_DATA_RANGE, INCREMENT, ADD_COMMENT } from '../constants';
 
 export function increment() {
   return {
@@ -19,5 +19,17 @@ export function changeDateRange(dateRange) {
     payLoad: {
       dateRange,
     },
+  };
+}
+
+export function addComment(articleId, user, text) {
+  return {
+    type: ADD_COMMENT,
+    payLoad: {
+      articleId,
+      user,
+      text,
+    },
+    generateId: true,
   };
 }

@@ -3,29 +3,26 @@ import PropTypes from 'prop-types';
 import Comment from './Comment';
 import CommentAdder from './CommentAdder';
 
-function CommentList({ comments }) {
+function CommentList({ article }) {
   let commentList = null;
+  const { comments } = article;
   if (comments.length) {
-    commentList = comments.map(comment => (
-      <li key={comment.id}>
-        <Comment comment={comment} />
+    commentList = comments.map(id => (
+      <li key={id}>
+        <Comment id={id} />
       </li>
     ));
   }
   return (
     <div>
       <ul>{commentList}</ul>
-      <CommentAdder />
+      <CommentAdder article={article} />
     </div>
   );
 }
 
-CommentList.defaultProps = {
-  comments: [],
-};
-
 CommentList.propTypes = {
-  comments: PropTypes.array,
+  article: PropTypes.object,
 };
 
 export default CommentList;

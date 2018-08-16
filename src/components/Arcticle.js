@@ -17,7 +17,7 @@ class Article extends Component {
     deleteArticle: PropTypes.func,
   };
   componentWillUpdate() {
-    console.log('update');
+    console.log('update article');
   }
   getBody() {
     const { article, isOpen } = this.props;
@@ -27,7 +27,7 @@ class Article extends Component {
     return (
       <div>
         <p>{article.text}</p>
-        <CommentList comments={article.comments} />
+        <CommentList article={article} />
       </div>
     );
   }
