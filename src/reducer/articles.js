@@ -1,27 +1,42 @@
-import { normalizedArticles } from '../fixtures';
-import { DELETE_ARTICLE, ADD_COMMENT } from '../constants';
+import { Record } from 'immutable';
+import { DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, START, SUCCESS } from '../constants';
+import { arrToMap, ReducerRecord } from '../helpers';
 
-const articlesMap = normalizedArticles.reduce((acc, article) => {
-  acc[article.id] = article;
-  return acc;
-}, {});
+const ArticleRecord = Record({
+  loading: false,
+  id: undefined,
+  date: undefined,
+  title: undefined,
+  text: undefined,
+  comments: [],
+});
 
-export default (articleState = articlesMap, action) => {
+export default (articleState = ReducerRecord(), action) => {
   const { type, payLoad } = action;
   switch (type) {
     case DELETE_ARTICLE:
-      const tmpState = { ...articleState };
-      delete tmpState[payLoad.id];
-      return tmpState;
+      return articleState.deleteIn(['entities', payLoad.id]);
+
     case ADD_COMMENT:
-      const article = articleState[payLoad.articleId];
-      return {
-        ...articleState,
-        [payLoad.articleId]: {
-          ...article,
-          comments: (article.comments || []).concat(payLoad.id.toString()),
-        },
-      };
+      return articleState.updateIn(['entities', payLoad.articleId, 'comments'], comments => comments.concat(payLoad.id.toString()));
+
+    case LOAD_ALL_ARTICLES + SUCCESS:
+      return articleState
+        .set('entities', arrToMap(action.response, ArticleRecord))
+        .set('loading', false)
+        .set('loaded', true);
+
+    case LOAD_ALL_ARTICLES + START:
+      return articleState.set('loading', true);
+
+    case LOAD_ARTICLE + START:
+      return articleState.setIn(['entities', payLoad.id, 'loading'], true);
+
+    case LOAD_ARTICLE + SUCCESS:
+      return articleState.setIn(['entities', payLoad.id], ArticleRecord({
+        loading: false,
+        ...payLoad.response,
+      }));
   }
   return articleState;
 };

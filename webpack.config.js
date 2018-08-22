@@ -77,6 +77,10 @@ const config = createConfig([
       headers: { 'Access-Control-Allow-Origin': '*' },
       host,
       port,
+      proxy: [{
+        path: '/api/',
+        target: 'http://localhost:3001',
+      }],
     }),
     sourceMaps(),
     addPlugins([

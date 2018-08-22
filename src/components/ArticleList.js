@@ -4,28 +4,42 @@ import { connect } from 'react-redux';
 import Article from './Arcticle';
 import accordionDecorator from '../decorators/Accordion';
 import { filtredArticlesSelector } from '../selectors';
+import { loadAllArticles } from '../AC';
+import Loader from './Loader';
 
-function ArticleList(props) {
-  const articleList = props.articles.map(article => (
-    <li key={article.id}>
-      <Article
-        article={article}
-        isOpen={article.id === props.openItemId}
-        toggleOpen={props.toggleOpenItem(article.id)}
-      />
-    </li>
-  ));
-  return <ul>{articleList}</ul>;
+class ArticleList extends React.Component {
+  static propTypes = {
+    openItemId: PropTypes.string,
+    toggleOpenItem: PropTypes.func.isRequired,
+    // from redux
+    articles: PropTypes.array,
+    loading: PropTypes.bool,
+    loadAllArticles: PropTypes.func,
+  };
+
+  componentDidMount() {
+    this.props.loadAllArticles();
+  }
+
+  render() {
+    if (this.props.loading) return <Loader />;
+    const articleList = this.props.articles.map(article => (
+      <li key={article.id}>
+        <Article
+          article={article}
+          isOpen={article.id === this.props.openItemId}
+          toggleOpen={this.props.toggleOpenItem(article.id)}
+        />
+      </li>
+    ));
+    return <ul>{articleList}</ul>;
+  }
 }
-
-ArticleList.propTypes = {
-  articles: PropTypes.array,
-  openItemId: PropTypes.string,
-  toggleOpenItem: PropTypes.func.isRequired,
-};
 
 export default connect((state) => {
   return {
     articles: filtredArticlesSelector(state),
+    loading: state.articles.loading,
+    loaded: state.articles.loaded,
   };
-})(accordionDecorator(ArticleList));
+}, { loadAllArticles })(accordionDecorator(ArticleList));

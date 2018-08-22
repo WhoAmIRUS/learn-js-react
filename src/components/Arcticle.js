@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CommentList from './CommentList';
-import { deleteArticle } from '../AC';
+import { deleteArticle, loadArticle, loadComments } from '../AC';
+import Loader from './Loader';
 
 class Article extends Component {
   static propTypes = {
@@ -13,12 +14,26 @@ class Article extends Component {
     }),
     isOpen: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func,
-    //from redux
+    // from redux
     deleteArticle: PropTypes.func,
+    loadArticle: PropTypes.func,
+    loadComments: PropTypes.func,
   };
+
+  componentWillReceiveProps({
+    article, isOpen, loadArticle, loadComments,
+  }) {
+    if (isOpen && !article.text && !article.loading) {
+      console.log('download article');
+      loadArticle(article.id);
+      loadComments(article.id);
+    }
+  }
+
   componentWillUpdate() {
     console.log('update article');
   }
+
   getBody() {
     const { article, isOpen } = this.props;
     if (!isOpen) {
@@ -38,6 +53,7 @@ class Article extends Component {
   };
   render() {
     const { article, toggleOpen } = this.props;
+    if (article.loading) return <Loader />;
     return (
       <div>
         <h3>{article.title}</h3>
@@ -49,4 +65,4 @@ class Article extends Component {
   }
 }
 
-export default connect(null, { deleteArticle })(Article);
+export default connect(null, { deleteArticle, loadArticle, loadComments })(Article);
