@@ -5,7 +5,7 @@ import {
   ADD_COMMENT,
   LOAD_ALL_ARTICLES,
   LOAD_ARTICLE,
-  START, SUCCESS, FAIL, LOAD_COMMENTS,
+  START, SUCCESS, FAIL, LOAD_COMMENTS, LOAD_PAGE_OF_COMMENTS,
 } from '../constants';
 
 export function increment() {
@@ -65,7 +65,7 @@ export function loadArticle(id) {
         }))
         .catch(error => dispatch({
           type: LOAD_ARTICLE + FAIL,
-          payLoad: { error },
+          error,
         }));
     }, 1000);
   };
@@ -75,5 +75,29 @@ export function loadComments(articleId) {
   return {
     type: LOAD_COMMENTS,
     callAPI: `/api/comment?article=${articleId}`,
+  };
+}
+
+export function loadPageOfComments(page, limit) {
+  return (dispatch, getState) => {
+    const { comments } = getState();
+    if (comments.pagination.getIn([page, 'loading']) || comments.pagination.getIn([page, 'ids'])) return null;
+    dispatch({
+      type: LOAD_PAGE_OF_COMMENTS + START,
+      payLoad: { page },
+    });
+    console.log('download comments');
+    setTimeout(() => {
+      fetch(`/api/comment?limit=${limit}&offset=${(page - 1) * limit}`)
+        .then(response => response.json())
+        .then(response => dispatch({
+          type: LOAD_PAGE_OF_COMMENTS + SUCCESS,
+          payLoad: { page, response },
+        }))
+        .catch(error => dispatch({
+          type: LOAD_COMMENTS + FAIL,
+          error,
+        }));
+    }, 1000);
   };
 }

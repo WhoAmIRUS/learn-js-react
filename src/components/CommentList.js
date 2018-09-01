@@ -5,6 +5,7 @@ import Comment from './Comment';
 import CommentAdder from './CommentAdder';
 import Loader from './Loader';
 import { commentsSelector } from '../selectors';
+import { loadComments } from '../AC';
 
 class CommentList extends Component {
   static propTypes = {
@@ -13,8 +14,17 @@ class CommentList extends Component {
     comments: PropTypes.array,
     loading: PropTypes.bool,
     loaded: PropTypes.bool,
+    loadComments: PropTypes.func,
   };
-
+  componentDidMount() {
+    const {
+      loadComments, comments, loading, article,
+    } = this.props;
+    if (!comments || !loading) {
+      console.log('download comments');
+      loadComments(article.id);
+    }
+  }
   render() {
     if (this.props.loading) return <Loader />;
     const { comments, article } = this.props;
@@ -37,8 +47,8 @@ class CommentList extends Component {
 
 export default connect((state, ownProps) => {
   return {
-    comments: commentsSelector(state, ownProps),
+    comments: commentsSelector(state, state.articles.entities.get(ownProps.article.id).comments),
     loading: state.comments.loading,
     loaded: state.comments.loaded,
   };
-})(CommentList);
+}, { loadComments })(CommentList);

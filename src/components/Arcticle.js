@@ -2,31 +2,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CommentList from './CommentList';
-import { deleteArticle, loadArticle, loadComments } from '../AC';
+import { deleteArticle, loadArticle } from '../AC';
 import Loader from './Loader';
 
 class Article extends Component {
   static propTypes = {
-    article: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string,
-      title: PropTypes.string.isRequired,
-    }),
+    id: PropTypes.string,
     isOpen: PropTypes.bool.isRequired,
     toggleOpen: PropTypes.func,
     // from redux
+    article: PropTypes.shape({
+      id: PropTypes.string,
+      text: PropTypes.string,
+      title: PropTypes.string,
+    }),
     deleteArticle: PropTypes.func,
     loadArticle: PropTypes.func,
-    loadComments: PropTypes.func,
   };
 
-  componentWillReceiveProps({
-    article, isOpen, loadArticle, loadComments,
-  }) {
-    if (isOpen && !article.text && !article.loading) {
+  componentDidMount() {
+    const { article, loadArticle, id } = this.props;
+    if (!article || (!article.text && !article.loading)) {
       console.log('download article');
-      loadArticle(article.id);
-      loadComments(article.id);
+      loadArticle(id);
     }
   }
 
@@ -39,10 +37,11 @@ class Article extends Component {
     if (!isOpen) {
       return null;
     }
+    if (!article || article.loading) return <Loader />;
     return (
       <div>
         <p>{article.text}</p>
-        <CommentList article={article} />
+        { article.get('loading') ? null : <CommentList article={article} /> }
       </div>
     );
   }
@@ -53,7 +52,7 @@ class Article extends Component {
   };
   render() {
     const { article, toggleOpen } = this.props;
-    if (article.loading) return <Loader />;
+    if (!article) return null;
     return (
       <div>
         <h3>{article.title}</h3>
@@ -65,4 +64,8 @@ class Article extends Component {
   }
 }
 
-export default connect(null, { deleteArticle, loadArticle, loadComments })(Article);
+export default connect((state, ownProps) => {
+  return {
+    article: state.articles.entities.get(ownProps.id),
+  };
+}, { deleteArticle, loadArticle })(Article);

@@ -1,6 +1,13 @@
-import { Record } from 'immutable';
-import { DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, START, SUCCESS } from '../constants';
-import { arrToMap, ReducerRecord } from '../helpers';
+import { Record, OrderedMap } from 'immutable';
+import {
+  DELETE_ARTICLE,
+  ADD_COMMENT,
+  LOAD_ALL_ARTICLES,
+  LOAD_ARTICLE,
+  START,
+  SUCCESS,
+} from '../constants';
+import { arrToMap } from '../helpers';
 
 const ArticleRecord = Record({
   loading: false,
@@ -9,6 +16,12 @@ const ArticleRecord = Record({
   title: undefined,
   text: undefined,
   comments: [],
+});
+
+const ReducerRecord = Record({
+  loading: false,
+  loaded: false,
+  entities: new OrderedMap({}),
 });
 
 export default (articleState = ReducerRecord(), action) => {

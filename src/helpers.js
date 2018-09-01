@@ -7,9 +7,3 @@ export function arrToMap(arr, ModelRecord) {
 export function mapToArr(map) {
   return map.valueSeq().toArray();
 }
-
-export const ReducerRecord = Record({
-  loading: false,
-  loaded: false,
-  entities: new OrderedMap({}),
-});

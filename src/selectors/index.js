@@ -4,7 +4,7 @@ import { mapToArr } from '../helpers';
 const articlesGetter = state => state.articles.entities;
 const filtersGetter = state => state.filters;
 const commentsGetter = state => state.comments.entities;
-const articleCommentsGetter = (state, ownProps) => state.articles.entities.get(ownProps.article.id).comments;
+const articleCommentsGetter = (state, ids) => ids;
 
 export const filtredArticlesSelector = createSelector(articlesGetter, filtersGetter, (articles, filters) => {
   const { dateRange: { from, to } } = filters;
@@ -16,6 +16,7 @@ export const filtredArticlesSelector = createSelector(articlesGetter, filtersGet
 
 export const commentsSelector = createSelector(commentsGetter, articleCommentsGetter, (comments, articleComments) => {
   return mapToArr(comments).filter((comment) => {
+    if (articleComments === undefined) return 0;
     return articleComments.indexOf(comment.id) === -1 ? 0 : 1;
   });
 });
