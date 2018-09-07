@@ -58,7 +58,10 @@ export function loadArticle(id) {
 
     setTimeout(() => {
       fetch(`/api/article/${id}`)
-        .then(response => response.json())
+        .then((response) => {
+          if (response.ok) return response.json();
+          throw new Error(response.statusText);
+        })
         .then(response => dispatch({
           type: LOAD_ARTICLE + SUCCESS,
           payLoad: { id, response },

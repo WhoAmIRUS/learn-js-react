@@ -5,7 +5,7 @@ import {
   LOAD_ALL_ARTICLES,
   LOAD_ARTICLE,
   START,
-  SUCCESS,
+  SUCCESS, FAIL,
 } from '../constants';
 import { arrToMap } from '../helpers';
 
@@ -50,6 +50,9 @@ export default (articleState = ReducerRecord(), action) => {
         loading: false,
         ...payLoad.response,
       }));
+    case LOAD_ARTICLE + FAIL:
+      console.log(action.error);
+      return articleState;
   }
   return articleState;
 };

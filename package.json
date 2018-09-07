@@ -78,7 +78,7 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "history": "^4.6.1",
+    "history": "^4.7.2",
     "immutable": "^3.8.2",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
@@ -89,6 +89,7 @@
     "react-modal": "^3.1.11",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.1.1",
+    "react-router-redux": "^5.0.0-alpha.9",
     "react-select": "^2.0.0",
     "react-transition-group": "^2.4.0",
     "redux": "^4.0.0",

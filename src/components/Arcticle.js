@@ -52,7 +52,7 @@ class Article extends Component {
   };
   render() {
     const { article, toggleOpen } = this.props;
-    if (!article) return null;
+    if (!article || !article.text) return null;
     return (
       <div>
         <h3>{article.title}</h3>
